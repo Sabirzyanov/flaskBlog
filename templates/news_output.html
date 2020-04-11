@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Post
+{% endblock %}
+
+{% block content %}
+{% for item in news%}
+<h2 style="text-align: center;">{{item.title}}{{admin}}</h2>
+<div style="background-color: #FFFACD" id="c{{item.id}}" class="container col-md6 border rounded shadow p-4 mb-4">
+    <script>
+       function decodeHTMLEntities(text) {
+        var textArea = document.createElement('textarea');
+        textArea.innerHTML = text;
+        return textArea.value;
+       }
+       var content = decodeHTMLEntities('{{item.content}}')
+       c{{item.id}}.insertAdjacentHTML('afterbegin', content);
+    </script>
+</div>
+
+{% endfor %}
+{% endblock %}

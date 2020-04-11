@@ -1,20 +1,37 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Блоги
+    Посты
 {% endblock %}
 
 {% block content %}
-<h1>Записи в блоге</h1>
+<h1 style="text-align: center">{{title}}</h1>
 {% for item in news%}
-<div class="col-md6 border rounded">
+<li style="list-style-type: None;"><div class="container col-md6 border rounded shadow p-4 mb-4" style="background-color: #FFFACD;">
     <h2>{{item.title}}</h2>
-    <div>
-        {{item.content}}
-    </div>
-    <div>
+    <div style="margin-top: 10px;">
+        <div id="c{{item.id}}">
+            <script>
+               function decodeHTMLEntities(text) {
+                var textArea = document.createElement('textarea');
+                textArea.innerHTML = text;
+                return textArea.value;
+               }
+               var content = decodeHTMLEntities('{{item.description}}')
+               c{{item.id}}.insertAdjacentHTML('afterbegin', content);
+            </script>
+
+        </div>
+        <a href="/post_output/{{item.id}}" class="btn btn-primary shadow " style="background: #e0fafb;
+                                                        outline: none;
+                                                        border: 0;
+                                                        color: #111111">
+            Открыть запись</a>
+        <div>
         Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
+        </div>
     </div>
 </div>
+</li>
 {% endfor %}
 {% endblock %}

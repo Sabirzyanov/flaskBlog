@@ -8,10 +8,13 @@
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="
     sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/style.css">
 </head>
-<body>
-    <nav class="navbar navbar-expand navbar-light" style="background-color: #e3f2fd;">
-      <a class="navbar-brand" href="{{ url_for('index') }}">PythonBlog</a>
+<body style="background-color: 	#e0fafb;">
+
+<header>
+    <nav class="navbar navbar-expand navbar-light" style="background-color: #c5e0f7;">
+      <a class="navbar-brand" href="#">PythonBlog</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -22,9 +25,22 @@
             <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
           </li>
             {% if current_user.is_authenticated %}
+                {% if current_user.is_admin %}
+                <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('logout') }}">[admin] | {{ current_user.name }}</a>
+              </li>
+
+                <li class="nav-item active">
+                        <a class="nav-link" href="{{url_for('user_post')}}">Users posts</a>
+                      </li>
+                {% else %}
+                <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('logout') }}">{{ current_user.name }}</a>
+              </li>
+                {% endif %}
             <li class="nav-item active">
-            <a class="nav-link" href="{{ url_for('logout') }}">{{ current_user.name }}</a>
-          </li>
+                <a class="nav-link" href="{{ url_for('add_news') }}">New post</a>
+              </li>
             {% else %}
             <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('login') }}">Login</a>
@@ -32,6 +48,7 @@
             <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('register') }}">Register</a>
           </li>
+
             {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -41,11 +58,10 @@
       </div>
     </nav>
 
-    <div class="container">
-        <div class="col">
-            {% block content_title %}
-            {% endblock %}
+</header>
 
+<div class="container" >
+        <div class="col">
             {% block content %}
             {% endblock %}
         </div>

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+Добавление поста
+{% endblock %}
+
+{% block content %}
+<h1>Добавление поста</h1>
+
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="container col-sm-8">
+    <div class="container border rounded shadow p-4 mb-4 " style="margin-top: 20px;background-color: #FFFACD;">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <p>
+                {{ form.title.label }}<br>
+                {{ form.title(class="form-control") }}<br>
+                {% for error in form.title.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </p>
+
+            <p>
+                {{ form.description.label }}<br>
+                {{ form.description(class="form-control") }}<br>
+            </p>
+
+            <p>
+                {{ form.content.label }}<br>
+                {{ form.content(class="form-control", id="editor") }}<br>
+                {% for error in form.content.errors %}
+                    <p content="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+            {{message}}
+        </form>
+    </div>
+    </div>
+    <div class="col-sm-2">
+    </div>
+</div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/18.0.0/classic/ckeditor.js"></script>
+<script>
+        ClassicEditor
+    .create( document.querySelector( '#editor' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+
+{% endblock %}
