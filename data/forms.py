@@ -16,7 +16,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
     name = StringField('Имя пользователя', validators=[DataRequired()])
-    # is_admin = BooleanField('Сделать редактором')
+    is_admin = BooleanField('Сделать админом')
     submit = SubmitField('Войти')
 
 

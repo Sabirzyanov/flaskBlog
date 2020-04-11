@@ -70,6 +70,7 @@ def register():
             email=form.email.data,
 
         )
+        user.is_admin = form.is_admin.data
         user.set_password(form.password.data)
         session.add(user)
         session.commit()
