@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Посты
+    {{site}}
 {% endblock %}
 
 {% block content %}
@@ -26,11 +26,12 @@
                                                         outline: none;
                                                         border: 0;
                                                         color: #111111">
-            Открыть запись</a>
+            Open post</a>
         <div>
-        Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
+        Author name - {{item.user.name}}, Publish date - {{item.created_date}}
         </div>
     </div>
+
 </div>
 </li>
 {% endfor %}

@@ -6,7 +6,11 @@
 
 {% block content %}
 {% for item in news%}
+{% if current_user.is_admin %}
 <h2 style="text-align: center;">{{item.title}}{{admin}}</h2>
+{% else %}
+<h2 style="text-align: center;">{{item.title}}</h2>
+{% endif %}
 <div style="background-color: #FFFACD" id="c{{item.id}}" class="container col-md6 border rounded shadow p-4 mb-4">
     <script>
        function decodeHTMLEntities(text) {
@@ -17,6 +21,24 @@
        var content = decodeHTMLEntities('{{item.content}}')
        c{{item.id}}.insertAdjacentHTML('afterbegin', content);
     </script>
+    {% if current_user.is_admin and item.is_private == True%}
+    <a href="/post_output_public/{{item.id}}" class="btn btn-primary shadow" style="background: #e0fafb;
+                                    outline: none;
+                                    border: 0;
+                                    color: #111111">Publish</a>
+
+    {% endif %}
+
+    {% if current_user == item.user or current_user.is_admin %}
+    <a href="/post_delete/{{item.id}}" class="btn btn-primary shadow" style="background: #fa8072;
+                                    outline: none;
+                                    border: 0;
+                                    color: #111111">Delete</a>
+    <a href="/news/{{item.id}}" class="btn btn-primary shadow" style="background: #e0fafb;
+                                    outline: none;
+                                    border: 0;
+                                    color: #111111">Edit</a>
+    {% endif %}
 </div>
 
 {% endfor %}
