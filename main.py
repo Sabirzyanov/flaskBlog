@@ -2,11 +2,13 @@
 import os
 from flask import Flask, render_template, redirect, abort, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+import random
 # Import files
 from data import db_session
-from data.forms import LoginForm, RegisterForm, NewsForm
+from data.forms import LoginForm, RegisterForm, NewsForm, Comment
 from data.news import News
 from data.users import User
+from data.comments import Comments
 
 # Main site parameters
 app = Flask(__name__)
@@ -17,15 +19,18 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+# Main page, where appear all posts
 @app.route('/')
 def index():
     session = db_session.create_session()
+    # Get search data
     s = request.args.get('s')
+    # If the search bar is not empty
     if s:
-        news = session.query(News).filter(News.title.contains(s), News.is_private == False).all()
+        news = session.query(News).filter(News.title.contains(s), News.is_private == False, News.to_rabbit == False).all()
         return render_template("index.html", news=news, title='Search returned: ', site='Search')
     else:
-        news = session.query(News).filter(News.is_private != True)
+        news = session.query(News).filter(News.is_private != True, News.to_rabbit == False)
     return render_template("index.html", news=news, title='All posts', site='Posts')
 
 
@@ -93,8 +98,10 @@ def add_news():
         news.title = form.title.data
         news.content = form.content.data
         news.description = form.description.data
-        current_user.news.append(news)
-        session.merge(current_user)
+        news.to_rabbit = form.to_rabbit.data
+        if news.to_rabbit:
+            news.is_private = False
+        session.merge(news)
         session.commit()
         return redirect('/')
     return render_template('add_news.html',
@@ -104,14 +111,27 @@ def add_news():
 @app.route('/post_output/<int:id>', methods=['GET', 'POST'])
 def news_output(id):
     session = db_session.create_session()
+    form = Comment()
     news = session.query(News).filter(News.id == id)
-    return render_template('news_output.html', news=news, admin=' | [for_admin]')
+    comments = session.query(Comments).filter(Comments.post_id == id)
+    if form.validate_on_submit():
+        comment = Comments()
+        comment.comment_content = form.comment_content.data
+        if not current_user.is_authenticated:
+            comment.user_name = 'User' + str(random.randrange(100, 999))
+        elif current_user.is_authenticated:
+            comment.user_name = current_user.name
+        comment.post_id = id
+        session.merge(comment)
+        session.commit()
+        return render_template('news_output.html', news=news, form=form, admin=' | [for_admin]', comments=comments)
+    return render_template('news_output.html', news=news, form=form, admin=' | [for_admin]', comments=comments)
 
 
 @app.route('/users_post/', methods=['GET', 'POST'])
 def user_post():
     session = db_session.create_session()
-    news = session.query(News).filter(News.is_private == True)
+    news = session.query(News).filter(News.is_private == True, News.to_rabbit == False)
     return render_template('index.html', news=news, title='Users posts(Not public)', site='User Posts')
 
 
@@ -148,6 +168,7 @@ def edit_news(id):
             form.title.data = news.title
             form.description.data = news.description
             form.content.data = news.content
+            form.to_rabbit.data = news.to_rabbit
         else:
             abort(404)
     if form.validate_on_submit():
@@ -158,13 +179,23 @@ def edit_news(id):
             news.title = form.title.data
             news.description = form.description.data
             news.content = form.content.data
+            news.to_rabbit = form.to_rabbit.data
             session.commit()
             return redirect('/')
+
         else:
             abort(404)
     return render_template('add_news.html', title='Post edit', form=form)
 
 
+@app.route('/rabbit')
+def main_rabbit():
+    session = db_session.create_session()
+    rabbit = session.query(News).filter(News.to_rabbit == True)
+    return render_template('index.html', news=rabbit, title='Rabbit', site='Rabbit', admin=' | [for_admin]')
+
+
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)
+    app.run()

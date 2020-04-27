@@ -6,6 +6,10 @@
 
 {% block content %}
 <h1 style="text-align: center">{{title}}</h1>
+{% if title == 'Rabbit'%}
+<h2 style="text-align: center">In Rabbit only questions(or as like that),
+                    and if you put something else, it will be immediately deleted</h2>
+{% endif %}
 {% for item in news%}
 <li style="list-style-type: None;"><div class="container col-md6 border rounded shadow p-4 mb-4" style="background-color: #FFFACD;">
     <h2>{{item.title}}</h2>

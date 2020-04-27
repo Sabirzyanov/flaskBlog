@@ -39,7 +39,40 @@
                                     border: 0;
                                     color: #111111">Edit</a>
     {% endif %}
+
 </div>
 
+
+{% endfor %}
+
+{% endblock %}
+{% block comments %}
+<h3 style="text-align: center;">{{com}}</h3>
+<div class="container border rounded shadow p-4 mb-4 " style="margin-top: 20px;background-color: #FFFACD;">
+<form action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+        <p>{{ form.comment_content.label }}<br>
+            {{ form.comment_content(class="form-control") }}<br>
+            {% for error in form.comment_content.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary shadow") }}</p>
+</form>
+</div>
+{% for c in comments %}
+    <li style="list-style-type: None;" >
+
+    <div  class="container com-md6 border rounded shadow p-4 mb-4" style="padding: -10px; background-color: #aadefe">
+        <h6>{{c.user_name}}:</h6>
+        <div  style="margin-left: 20px; margin-bottom: -10px;">
+            {{c.comment_content}}
+        </div>
+    </div></li>
 {% endfor %}
 {% endblock %}
+
+

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body style="background-color: 	#e0fafb;">
-
 <header>
     <nav class="navbar navbar-expand navbar-light" style="background-color: #c5e0f7;">
       <a class="navbar-brand" href="#">PythonBlog</a>
@@ -41,9 +40,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('add_news') }}">New post</a>
               </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/rabbit">Rabbit</a>
-              </li>
+
             {% else %}
             <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('login') }}">Login</a>
@@ -53,6 +50,9 @@
           </li>
 
             {% endif %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{{url_for('main_rabbit')}}">Rabbit</a>
+              </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" method="GET">
           <input class="form-control mr-sm-2" name="s" type="search" placeholder="Search by post name"
@@ -67,6 +67,10 @@
 <div class="container" >
         <div class="col">
             {% block content %}
+            {% endblock %}
+        </div>
+        <div class="com">
+            {% block comments %}
             {% endblock %}
         </div>
     </div>

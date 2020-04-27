@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<h1 style="text-align: center;">Добавление поста</h1>
+<h1 style="text-align: center;">Add post</h1>
 
 <div class="row">
     <div class="col-sm-2"></div>
@@ -38,7 +38,8 @@
                     </p>
                 {% endfor %}
             </p>
-            <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+            <p>{{ form.to_rabbit() }} {{ form.to_rabbit.label }}</p>
+            <p>{{ form.submit(type="submit", class="btn btn-primary shadow") }}</p>
             {{message}}
         </form>
     </div>
