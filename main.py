@@ -34,12 +34,14 @@ def index():
     return render_template("index.html", news=news, title='All posts', site='Posts')
 
 
+# Need for users login
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
     return session.query(User).get(user_id)
 
 
+# Login users, and add in table
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -55,6 +57,7 @@ def login():
     return render_template('login.html', form=form)
 
 
+# Logout users
 @app.route('/logout')
 @login_required
 def logout():
@@ -62,6 +65,7 @@ def logout():
     return redirect("/")
 
 
+# Register users
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -88,6 +92,7 @@ def register():
     return render_template('register.html', form=form)
 
 
+# Add new news
 @app.route('/news', methods=['GET', 'POST'])
 @login_required
 def add_news():
@@ -99,6 +104,7 @@ def add_news():
         news.content = form.content.data
         news.description = form.description.data
         news.to_rabbit = form.to_rabbit.data
+        # News to rabbit not private
         if news.to_rabbit:
             news.is_private = False
         session.merge(news)
@@ -108,17 +114,21 @@ def add_news():
                            form=form)
 
 
+# News output
 @app.route('/post_output/<int:id>', methods=['GET', 'POST'])
 def news_output(id):
     session = db_session.create_session()
     form = Comment()
     news = session.query(News).filter(News.id == id)
     comments = session.query(Comments).filter(Comments.post_id == id)
+    # Comments
     if form.validate_on_submit():
         comment = Comments()
         comment.comment_content = form.comment_content.data
+        # If user not login or register, his username is User + random number
         if not current_user.is_authenticated:
             comment.user_name = 'User' + str(random.randrange(100, 999))
+        # If user is login or register
         elif current_user.is_authenticated:
             comment.user_name = current_user.name
         comment.post_id = id
@@ -128,6 +138,7 @@ def news_output(id):
     return render_template('news_output.html', news=news, form=form, admin=' | [for_admin]', comments=comments)
 
 
+# Output news only for admin
 @app.route('/users_post/', methods=['GET', 'POST'])
 def user_post():
     session = db_session.create_session()
@@ -135,6 +146,7 @@ def user_post():
     return render_template('index.html', news=news, title='Users posts(Not public)', site='User Posts')
 
 
+# All news is not private
 @app.route('/post_output_public/<int:id>', methods=['GET', 'POST'])
 def user_posts_public(id):
     session = db_session.create_session()
@@ -144,6 +156,7 @@ def user_posts_public(id):
     return redirect('/')
 
 
+# News delete
 @app.route('/post_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def news_delete(id):
@@ -157,6 +170,7 @@ def news_delete(id):
     return redirect('/')
 
 
+# Edit news
 @app.route('/news/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_news(id):
@@ -182,12 +196,12 @@ def edit_news(id):
             news.to_rabbit = form.to_rabbit.data
             session.commit()
             return redirect('/')
-
         else:
             abort(404)
     return render_template('add_news.html', title='Post edit', form=form)
 
 
+# Output rabbit traps. These are just questions
 @app.route('/rabbit')
 def main_rabbit():
     session = db_session.create_session()
@@ -196,6 +210,5 @@ def main_rabbit():
 
 
 if __name__ == '__main__':
-    # port = int(os.environ.get("PORT", 5000))
-    # app.run(host='0.0.0.0', port=port)
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
