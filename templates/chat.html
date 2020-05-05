@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+Chat
+{% endblock %}
+{% block content %}
+<h1 style="text-align:center;">Messages:</h1>
+<form action="" method="get"></form>
+<div class="container border rounded shadow p-4 mb-4 " style="margin-top: 20px;background-color: #FFFACD;">
+<div class="col-sm-2"></div>
+<form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+        <p>{{ form.chat_text.label }}<br>
+            {{ form.chat_text(class="form-control") }}<br>
+            {% for error in form.chat_text.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary shadow") }}</p>
+</form>
+
+</div>
+
+{% for c in chat %}
+<h4>{{c.author_name}}:</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{c.chat_txt}}</p>
+{% endfor %}
+{% endblock %}

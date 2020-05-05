@@ -16,6 +16,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password_again = PasswordField('Password again', validators=[DataRequired()])
     name = StringField('Username', validators=[DataRequired()])
+    about_me = StringField('About me')
     is_admin = BooleanField('Make admin')
     submit = SubmitField('Register')
 
@@ -25,10 +26,14 @@ class NewsForm(FlaskForm):
     description = StringField('Description', validators=[Length(max=100)])
     content = TextAreaField("Content", validators=[Length(min=3, max=8000)])
     to_rabbit = BooleanField('To Rabbit')
-    submit = SubmitField('Send.')
+    submit = SubmitField('Send')
 
 
 class Comment(FlaskForm):
-    comment_content = TextAreaField('Comment', validators=[(DataRequired())])
+    comment_content = TextAreaField('Comment', validators=[DataRequired()])
     submit = SubmitField('Send')
 
+
+class Chat(FlaskForm):
+    chat_text = TextAreaField('Chat', validators=[DataRequired()])
+    submit = SubmitField('Send')

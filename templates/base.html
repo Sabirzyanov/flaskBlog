@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +9,10 @@
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="
     sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body style="background-color: 	#e0fafb;">
 <header>
@@ -23,10 +27,14 @@
           <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
           </li>
+
+            <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('faq')}}">About us and FAQ</a>
+          </li>
             {% if current_user.is_authenticated %}
                 {% if current_user.is_admin %}
                 <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('logout') }}">[admin] | {{ current_user.name }}</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">[admin] | {{ current_user.name }}</a>
               </li>
 
                 <li class="nav-item active">
@@ -34,25 +42,53 @@
                       </li>
                 {% else %}
                 <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('logout') }}">{{ current_user.name }}</a>
+                <a class="nav-link" href="{{ url_for('profile') }}">{{ current_user.name }}</a>
               </li>
                 {% endif %}
             <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('add_news') }}">New post</a>
               </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('chat') }}">Chat</a>
+              </li>
+            <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('main_rabbit')}}">Rabbit</a>
+          </li>
 
             {% else %}
-            <li class="nav-item active">
-            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-          </li>
-            <li class="nav-item active">
-            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-          </li>
-
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Authorization
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{{ url_for('login') }}">Login</a>
+                  <a class="dropdown-item" href="{{ url_for('register') }}">Register</a>
+                </div>
+            </li>
             {% endif %}
-            <li class="nav-item active">
-                <a class="nav-link" href="{{url_for('main_rabbit')}}">Rabbit</a>
-              </li>
+        {% if is_sort %}
+        <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Sort posts by
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/sort_by/{{1}}">Name(from a to z)</a>
+                  <a class="dropdown-item" href="/sort_by/{{2}}">Name(from z to a)</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Categories
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/categories/programming">Programming</a>
+                    <a class="dropdown-item" href="/categories/hobbies">Hobbies</a>
+                    <a class="dropdown-item" href="/categories/games">Games</a>
+                  <a class="dropdown-item" href="/categories/auto">Auto</a>
+                    <a class="dropdown-item" href="/categories/other">Other</a>
+                </div>
+            </li>
+            {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0" method="GET">
           <input class="form-control mr-sm-2" name="s" type="search" placeholder="Search by post name"
@@ -63,7 +99,38 @@
     </nav>
 
 </header>
-
+<style>
+    .star-rating{
+	font-size: 0;
+}
+.star-rating__wrap{
+	display: inline-block;
+	font-size: 1rem;
+}
+.star-rating__wrap:after{
+	content: "";
+	display: table;
+	clear: both;
+}
+.star-rating__ico{
+	float: right;
+	padding-left: 2px;
+	cursor: pointer;
+	color: #FFB300;
+}
+.star-rating__ico:last-child{
+	padding-left: 0;
+}
+.star-rating__input{
+	display: none;
+}
+.star-rating__ico:hover:before,
+.star-rating__ico:hover ~ .star-rating__ico:before,
+.star-rating__input:checked ~ .star-rating__ico:before
+{
+	content: "\f005";
+}
+</style>
 <div class="container" >
         <div class="col">
             {% block content %}

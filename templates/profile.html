@@ -1,17 +1,21 @@
-{% extends "base.html" %}
-
-{% block title %}
-    {{site}}
-{% endblock %}
-
+{% extends 'base.html' %}
 {% block content %}
-<h1 style="text-align: center">{{title}}</h1>
-{% if title == 'Rabbit'%}
-<h2 style="text-align: center">In Rabbit only questions(or as like that),
-                    and if you put something else, it will be immediately deleted</h2>
-{% endif %}
+<div class="card shadow" style="width: 18rem; position: absolute;; top: 25px">
+  <img src="static/img/profile.jpg" class="card-img-top" alt="">
+  <div class="card-body">
+    <h5 class="card-title">{{current_user.name}}</h5>
+    <p class="card-text">{{current_user.about_me}}</p>
+    <a href="{{url_for('logout')}}" class="btn btn-primary">Logout profile</a>
+  </div>
+</div>
+<div class="card shadow" style="width: 18rem; top: 25px; left: 31%">
+  <div class="card-body">
+    <h5 class="card-title">My posts:</h5>
+  </div>
+</div>
 {% for item in news%}
-<li style="list-style-type: None;"><div class="container col-md6 border rounded shadow p-4 mb-4" style="background-color: #FFFACD;">
+<li style="list-style-type: None; position: relative; left: 18%; top: 30px"><div class="container col-md6 border rounded shadow p-4 mb-4" style="background-color: #FFFACD;
+width: 50rem">
     <h2>{{item.title}}</h2>
     <div style="margin-top: 10px;">
         <div id="c{{item.id}}">
@@ -31,9 +35,6 @@
                                                         border: 0;
                                                         color: #111111">
             Open post</a>
-        <div>
-        Author name - {{item.user.name}}, Publish date - {{item.created_date}}
-        </div>
     </div>
 
 </div>

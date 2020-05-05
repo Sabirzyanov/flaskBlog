@@ -38,6 +38,17 @@
                     </p>
                 {% endfor %}
             </p>
+            <p>
+                <div class="form-group">
+                    <label for="classSelect">Categories</label>
+                    <select class="form-control" id="classSelect" name="class">
+                      <option>Programming</option>
+                      <option>Hobbies</option>
+                      <option>Games</option>
+                      <option>Auto</option>
+                    </select>
+                 </div>
+            </p>
             <p>{{ form.to_rabbit() }} {{ form.to_rabbit.label }}</p>
             <p>{{ form.submit(type="submit", class="btn btn-primary shadow") }}</p>
             {{message}}
