@@ -11,5 +11,5 @@ class Comments(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     comment_content = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    post_id = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    user_name = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    post_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    user_name = sqlalchemy.Column(sqlalchemy.String, nullable=False)

@@ -18,8 +18,8 @@ def global_init(db_file):
         raise Exception("Необходимо указать файл базы данных.")
 
     # conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
-    conn_str = 'postgres://izinsczieoazxy:cecdb4a5fed2d64bbf994f806ddb1851ad1d7d2e7d0f78c3c2f0fcd54e41eed7' \
-               '@ec2-54-247-125-38.eu-west-1.compute.amazonaws.com:5432/dfv4vfqusmd2u9'
+    conn_str = 'postgres://owldriiwmspbrz:8e3649d6f77407b0ad8e146b7574c3f4ddade81cd0bf21a067651b5da5eed596@ec2-52-31-' \
+               '94-195.eu-west-1.compute.amazonaws.com:5432/d8js8cf6v7shdn'
     print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)
