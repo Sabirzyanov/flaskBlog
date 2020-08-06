@@ -1,4 +1,4 @@
-    # Import libraries
+# Import libraries
 import os
 from flask import Flask, render_template, redirect, abort, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user

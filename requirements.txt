@@ -4,3 +4,4 @@ sqlalchemy
 flask
 flask_login
 flask_wtf
+psycopg2
