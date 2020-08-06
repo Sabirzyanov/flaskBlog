@@ -7,7 +7,7 @@ SqlAlchemyBase = dec.declarative_base()
 
 __factory = None
 
-    
+
 def global_init(db_file):
     global __factory
 
@@ -17,9 +17,9 @@ def global_init(db_file):
     if not db_file or not db_file.strip():
         raise Exception("Необходимо указать файл базы данных.")
 
-    conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
-    # conn_str = 'postgres://yxysimhlzlznox:b7468dda49521fa7a9d6b560db1cda0edd1a9efb4e1675e031f7ce3fe39c7169@ec2-54-75-'
-    #            '246-118.eu-west-1.compute.amazonaws.com:5432/dck5tgj5aujdcg'
+    # conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
+    conn_str = 'postgres://izinsczieoazxy:cecdb4a5fed2d64bbf994f806ddb1851ad1d7d2e7d0f78c3c2f0fcd54e41eed7' \
+               '@ec2-54-247-125-38.eu-west-1.compute.amazonaws.com:5432/dfv4vfqusmd2u9'
     print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)

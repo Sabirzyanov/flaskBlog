@@ -1,4 +1,4 @@
-# Import libraries
+    # Import libraries
 import os
 from flask import Flask, render_template, redirect, abort, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -160,8 +160,13 @@ def news_output(id):
         session.commit()
         return render_template('news_output.html', news=news, form=form, admin=' | [for_admin]', comments=comments,
                                like=like, result=result)
-    return render_template('news_output.html', news=news, form=form, admin=' | [for_admin]', comments=comments,
+    comment_count = session.query(Comments)
+    if comment_count.count() == 0:
+        return render_template('news_output.html', news=news, form=form, admin=' | [for_admin]',
                            like=like, result=result)
+    else:
+        return render_template('news_output.html', news=news, form=form, admin=' | [for_admin]', comments=comments,
+                               like=like, result=result)
 
 
 # Output news only for admin
@@ -290,5 +295,6 @@ def profile():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)
+    app.run()
